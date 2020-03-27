@@ -7,7 +7,7 @@ const figlet = require('figlet'),
       promptQuery = require('../prompt/promptQuery'),
       filter = require('../RARBG/filter'),
       promptPermission = require('../prompt/promptPermission'),
-      promptPath = require('../prompt/promptPath'),
+      checkConfig = require('../Config/checkConfig');
       execa = require('execa');
 
 (async () => {
@@ -19,23 +19,23 @@ const figlet = require('figlet'),
             figlet.textSync('Get Torrents', {horizontalLayout:"full"})
         )
     );
-
-    let userPref = await promptQuery();
     
-    try {
+    try {   
+
+        let paths = await checkConfig();
+        
+        let userPref = await promptQuery();
 
         const searchResult = await rarbg(userPref.keyword, userPref.category);
-        //console.log(searchResult);
+        
         let filteredTorrent = await filter(searchResult);
 
         console.log('----------------------------------------------------');
         console.log(`We think the following torrent will be best: '${filteredTorrent.title}'. It has got ${filteredTorrent.seeders} seeders.`);
 
-        let downloadOk = await promptPermission();
+        let downloadAsk = await promptPermission();
 
-        if (downloadOk.downloadOk === 'y') {
-
-            let paths = await promptPath();
+        if (downloadAsk.downloadOk === 'y') {
             
             const {stdout} = await execa(`start ${paths.torrentPath} "${paths.downloadPath}" "${filteredTorrent.download}"`);
                 
