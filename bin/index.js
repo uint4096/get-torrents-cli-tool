@@ -8,7 +8,9 @@ const figlet = require('figlet'),
       filter = require('../RARBG/filter'),
       promptPermission = require('../prompt/promptPermission'),
       checkConfig = require('../Config/checkConfig');
-      execa = require('execa');
+      execa = require('execa'),
+      clui = require('clui'),
+      Spinner = clui.Spinner;
 
 (async () => {
 
@@ -20,18 +22,23 @@ const figlet = require('figlet'),
         )
     );
     
+    const countdown = new Spinner('Getting the right torrent...');
+
     try {   
 
         let paths = await checkConfig();
-        
+
         let userPref = await promptQuery();
+ 
+        countdown.start();
 
         const searchResult = await rarbg(userPref.keyword, userPref.category);
         
         let filteredTorrent = await filter(searchResult);
 
-        console.log('----------------------------------------------------');
-        console.log(`We think the following torrent will be best: '${filteredTorrent.title}'. It has got ${filteredTorrent.seeders} seeders.`);
+        countdown.stop();
+
+        console.log(`\n\n -> We think the following torrent will be best: '${chalk.greenBright(filteredTorrent.title)}'. It has got ${filteredTorrent.seeders} seeders.\n`);
 
         let downloadAsk = await promptPermission();
 
@@ -43,7 +50,8 @@ const figlet = require('figlet'),
 
     } catch(err) {
 
-        console.log(err);
+        console.log('\n\n -> '+ chalk.redBright(err.error));
+        countdown.stop();
 
     }
 
