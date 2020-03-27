@@ -1,15 +1,27 @@
 {
   "name": "torrent-cli-tool",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "A CLI tool to download torrents",
   "main": "bin/index.js",
+  "homepage": "https://github.com/abhishek-kumar251095/get-torrents-cli-tool.git#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhishek-kumar251095/get-torrents-cli-tool.git"
+  },
   "bin": {
     "gettorrent": "bin/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "engines": {
+    "node": ">=8"
+  },
+  "keywords": [
+    "torrent",
+    "CLI"
+  ],
+  "preferGlobal": true,
   "author": "",
   "license": "ISC",
   "dependencies": {
