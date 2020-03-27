@@ -4,10 +4,10 @@ const figlet = require('figlet'),
       chalk = require('chalk'),
       clear = require('clear'),
       rarbg = require('../RARBG/rarbg'),
-      promptQuery = require('../prompt/promptQuery'),
       filter = require('../RARBG/filter'),
-      promptPermission = require('../prompt/promptPermission'),
-      checkConfig = require('../Config/checkConfig');
+      checkConfig = require('../Config/checkConfig'),
+      promptConsts = require('../prompt/promptConsts'),
+      promptAsk = require('../prompt/promptAsk'),
       execa = require('execa'),
       clui = require('clui'),
       Spinner = clui.Spinner;
@@ -26,9 +26,9 @@ const figlet = require('figlet'),
 
     try {   
 
-        let paths = await checkConfig();
+        const paths = await checkConfig();
 
-        let userPref = await promptQuery();
+        let userPref = await promptAsk(promptConsts.QUERY_QUESTIONS);
  
         countdown.start();
 
@@ -40,7 +40,7 @@ const figlet = require('figlet'),
 
         console.log(`\n\n -> We think the following torrent will be best: '${chalk.greenBright(filteredTorrent.title)}'. It has got ${filteredTorrent.seeders} seeders.\n`);
 
-        let downloadAsk = await promptPermission();
+        let downloadAsk = await promptAsk(promptConsts.PERMISSION_QUESTION);
 
         if (downloadAsk.downloadOk === 'y') {
             

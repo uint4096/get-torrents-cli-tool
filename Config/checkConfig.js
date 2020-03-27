@@ -1,6 +1,7 @@
 const configStore = require('configstore'),
       pacakageJson = require('../package.json'),
-      promptPath = require('../prompt/promptPath'),
+      promptPath = require('../prompt/promptAsk'),
+      promptConsts = require('../prompt/promptConsts'),
       chalk = require('chalk');
 
 
@@ -20,7 +21,7 @@ module.exports = async function(){
     } else {
 
         console.log(chalk.green('Welcome to GetTorrents!\n'));
-        let paths = await promptPath();
+        let paths = await promptPath(promptConsts.PATH_QUESTIONS);
         config.set('torrentPath', paths.torrentPath);
         config.set('downloadPath', paths.downloadPath);
         console.log(chalk.green('\nYou are ready to go!\n'))
